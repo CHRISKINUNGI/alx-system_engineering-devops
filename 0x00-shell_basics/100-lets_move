@@ -1,0 +1,2 @@
+#!/bin/bash
+mv -rua *[A-Z] /tmp/u
