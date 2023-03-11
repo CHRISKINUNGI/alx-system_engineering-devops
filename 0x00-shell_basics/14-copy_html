@@ -1,2 +1,2 @@
 #!/bin/bash
-cp -un ./current_directory/*.html ./parent_directory/
+rsync -av --update --exclude='*' --include='*.html' ./ ../
