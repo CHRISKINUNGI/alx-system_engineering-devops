@@ -1,2 +1,2 @@
 #!/bin/bash
-find . -type d -empty -print -type f -empty -print 
+find . \( -type f -o -type d -o -type l -empty -print \) 
