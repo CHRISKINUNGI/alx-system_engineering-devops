@@ -1,1 +1,1 @@
-Bash scripting
+Shell, init files, variables and expansions
