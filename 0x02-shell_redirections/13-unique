@@ -1,3 +1,2 @@
 #!/bin/bash
-
-fmt sort | uniq -u
+sort | uniq -u
