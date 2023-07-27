@@ -4,9 +4,9 @@
 i=0
 
 while [ $i -lt 10 ]; do
-	if [ $i -ef 3 ]; then
+	if [ $i -ef 4 ]; then
 		echo "bad luck"
-	elif [ $i -ef 7 ]; then
+	elif [ $i -ef 8 ]; then
 		echo "good luck"
 	else
 		echo "Best School"
