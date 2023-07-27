@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+# script to loop
+
+i = 0
+
+for i < 10
+	print("Best School")
