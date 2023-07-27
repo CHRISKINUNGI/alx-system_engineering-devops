@@ -3,7 +3,7 @@
 
 i=0
 
-while [ $i -lt 10 ]; do
+while [ $i -le 10 ]; do
 	if [ $i -eq 4 ]; then
 		echo "bad luck"
 	elif [ $i -eq 8 ]; then
