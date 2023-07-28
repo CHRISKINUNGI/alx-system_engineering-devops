@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+# This script manages the manage_my_process Bash script.
+# It can be used to start, stop, or restart the process.
+
+# Get the command-line arguments.
+action=$1
+
+# Check if the user has provided a valid command-line argument.
+if [[ $action != "start" && $action != "stop" && $action != "restart" ]]; then
+  echo "Usage: 101-manage_my_process {start|stop|restart}"
+  exit 1
+fi
+
+# Check if the process is already running.
+if [[ -f /var/run/my_process.pid ]]; then
+  pid=$(cat /var/run/my_process.pid)
+  if [[ $(ps -p "$pid" -o stat=) == "T" ]]; then
+    # The process is already running.
+    if [[ $action == "start" ]]; then
+      echo "The process is already running."
+    elif [[ $action == "stop" ]]; then
+      echo "The process is already stopped."
+    elif [[ $action == "restart" ]]; then
+      echo "The process is already running. To restart it, please stop it first."
+    fi
+    exit 1
+  fi
+fi
+
+# Start the process.
+if [[ $action == "start" ]]; then
+  nohup ./manage_my_process &
+  echo "manage_my_process started"
+  echo $! > /var/run/my_process.pid
+elif [[ $action == "stop" ]]; then
+  kill "$(cat /var/run/my_process.pid)"
+  echo "manage_my_process stopped"
+  rm /var/run/my_process.pid
+elif [[ $action == "restart" ]]; then
+  kill "$(cat /var/run/my_process.pid)"
+  echo "manage_my_process stopped"
+  rm /var/run/my_process.pid
+  nohup ./manage_my_process &
+  echo "manage_my_process restarted"
+fi
