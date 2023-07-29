@@ -5,7 +5,7 @@
 #
 # You must use the while loop (for and until are forbidden)
 
-while IFS=: read -r user password id group info info home command
+while IFS=: read -r user password id group info info home
 do
     printf "The user %-10s is part of the %-5s gang, lives in %-20s: and rides . %-3s's place is protected by the passcode %-15s, more info about the user here: %s\n" "$user" "$group" "$home" "$id" "$password" "$info"
 done < /etc/passwd
