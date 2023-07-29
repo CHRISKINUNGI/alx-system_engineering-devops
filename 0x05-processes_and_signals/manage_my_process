@@ -1,6 +1,50 @@
 #!/usr/bin/env bash
-# script to manage_my_process
-while true; do
-  echo "I am alive!" >> /tmp/my_process
-  sleep 2
-done
+# Script: manage_my_process
+# Description: This script indefinitely writes "I am alive!" to the file /tmp/my_process.
+#              It can be started, stopped, or restarted using the provided arguments.
+
+# Function to write "I am alive!" to the file /tmp/my_process
+function write_alive_message {
+    while true; do
+        echo "I am alive!" >> /tmp/my_process
+        sleep 2
+    done
+}
+
+# Check the argument provided to the script
+case "$1" in
+    start)
+        # Check if the process is already running by checking for an existing PID file
+        if [ -f "/var/run/my_process.pid" ]; then
+            echo "manage_my_process is already running. Please stop it before starting again."
+        else
+            # Start the process in the background and save its PID to a file
+            write_alive_message &
+            echo $! > /var/run/my_process.pid
+            echo "manage_my_process started"
+        fi
+        ;;
+    stop)
+        # Check if the PID file exists, then stop the process and delete the PID file
+        if [ -f "/var/run/my_process.pid" ]; then
+            pid=$(cat /var/run/my_process.pid)
+            kill $pid
+            rm /var/run/my_process.pid
+            echo "manage_my_process stopped"
+        else
+            echo "manage_my_process is not running."
+        fi
+        ;;
+    restart)
+        # Stop the process and delete the PID file
+        $0 stop
+        # Start the process in the background and save its PID to a file
+        $0 start
+        echo "manage_my_process restarted"
+        ;;
+    *)
+        echo "Usage: manage_my_process {start|stop|restart}"
+        exit 1
+        ;;
+esac
+
