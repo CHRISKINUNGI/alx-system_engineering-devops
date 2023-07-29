@@ -6,40 +6,49 @@
 action=$1
 
 # Check if the user has provided a valid command-line argument.
-if [[ $action != "start" && $action != "stop" && $action != "restart" ]]; then
-  echo "Usage: 101-manage_my_process {start|stop|restart}"
-  exit 1
-fi
 
-# Check if the process is already running.
-if [[ -f /var/run/my_process.pid ]]; then
-  pid=$(cat /var/run/my_process.pid)
-  if [[ $(ps -p "$pid" -o stat=) == "T" ]]; then
-    # The process is already running.
-    if [[ $action == "start" ]]; then
-      echo "The process is already running."
-    elif [[ $action == "stop" ]]; then
-      echo "The process is already stopped."
-    elif [[ $action == "restart" ]]; then
-      echo "The process is already running. To restart it, please stop it first."
-    fi
-    exit 1
+#!/bin/bash
+
+start_process() {
+  if [ -f "/var/run/my_process.pid" ]; then
+    echo "manage_my_process is already running."
+  else
+    ./manage_my_process &
+    echo $! > /var/run/my_process.pid
+    echo "manage_my_process started"
   fi
-fi
+}
 
-# Start the process.
-if [[ $action == "start" ]]; then
-  nohup ./manage_my_process &
-  echo "manage_my_process started"
-  echo $! > /var/run/my_process.pid
-elif [[ $action == "stop" ]]; then
-  kill "$(cat /var/run/my_process.pid)"
-  echo "manage_my_process stopped"
-  rm /var/run/my_process.pid
-elif [[ $action == "restart" ]]; then
-  kill "$(cat /var/run/my_process.pid)"
-  echo "manage_my_process stopped"
-  rm /var/run/my_process.pid
-  nohup ./manage_my_process &
+stop_process() {
+  if [ -f "/var/run/my_process.pid" ]; then
+    pid=$(cat /var/run/my_process.pid)
+    kill "$pid"
+    rm -f /var/run/my_process.pid
+    echo "manage_my_process stopped"
+  else
+    echo "manage_my_process is not running."
+  fi
+}
+
+restart_process() {
+  stop_process
+  start_process
   echo "manage_my_process restarted"
-fi
+}
+
+case "$1" in
+  start)
+    start_process
+    ;;
+  stop)
+    stop_process
+    ;;
+  restart)
+    restart_process
+    ;;
+  *)
+    echo "Usage: $0 {start|stop|restart}"
+    exit 1
+    ;;
+esac
+
