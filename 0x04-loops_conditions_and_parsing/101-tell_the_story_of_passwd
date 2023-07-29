@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
-# Format: The user USERNAME is part of the GROUP_ID gang, lives in HOME_DIRECTORY and rides COMMAND/SHELL.
-# USER ID's place is protected by the passcode PASSWORD, more info about the user here: USER ID INFO
+# Format: The user USERNAME is part of the GROUP_ID gang, lives in HOME_DIRECTORY: and rides COMMAND/SHELL. USERNAME's place is protected by the passcode PASSWORD, more info about the user here: USER ID INFO
 #
 # Requirements:
 #
@@ -8,5 +7,5 @@
 
 while IFS=: read -r user password id group info info home command
 do
-	echo "The user $user is part of the $group gang, lives in $home:$command and rides . $id's place is protected by the passcode $password, more info about the user here: $info."
+    printf "The user %-10s is part of the %-5s gang, lives in %-20s: and rides . %-3s's place is protected by the passcode %-15s, more info about the user here: %s\n" "$user" "$group" "$home" "$id" "$password" "$info"
 done < /etc/passwd
