@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 # Define the regular expression pattern
-regex = /h[a-z]n/
+regex = /h.n/
 
 # Extract the first command-line argument
 input_text = ARGV[0]
