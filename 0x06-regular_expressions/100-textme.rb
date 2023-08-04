@@ -1,19 +1,20 @@
 #!/usr/bin/env ruby
 
-# open the log file
-File.open("log", "r") do |f|
-  # read each line of the file
-  f.each_line do |line|
-    # match the line with a regular expression
-    match = line.match(/\[from:(.*?)\] \[to:(.*?)\] \[flags:(.*?)\]/)
-    if match
-      # extract the sender, receiver, and flags from the match
-      sender = match[1]
-      receiver = match[2]
-      flags = match[3]
+# Define the regular expression pattern to extract required information
+regex = /\[from:(.*?)\] \[to:(.*?)\] \[flags:(.*?)\]/
 
-      # print the result
-      puts "#{sender},#{receiver},#{flags}"
-    end
+# Read lines from standard input
+ARGF.each_line do |line|
+  # Match the regular expression to extract sender, receiver, and flags
+  match = line.match(regex)
+
+  # Output sender, receiver, and flags if there's a match
+  if match
+    sender = match[1]
+    receiver = match[2]
+    flags = match[3]
+
+    puts "#{sender},#{receiver},#{flags}"
   end
 end
+
