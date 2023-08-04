@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# Function to handle incoming data
+handle_data() {
+  while IFS= read -r line; do
+    echo "$line"
+  done
+}
+
+# Listen on port 98
+nc -l -p 98 -c handle_data
