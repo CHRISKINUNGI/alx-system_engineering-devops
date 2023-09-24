@@ -1,6 +1,6 @@
 # Ensure SSH client configuration
 file_line { 'Turn off passwd auth':
-  path   => '/etc/ssh/sshd_config',
+  path   => '/etc/ssh/ssh_config',
   line   => 'PasswordAuthentication no',
   ensure => present,
 }
