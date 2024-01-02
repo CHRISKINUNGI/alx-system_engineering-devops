@@ -1,13 +1,44 @@
+# #!/usr/bin/env bash
+# # Installs Nginx web server on the server
+# #+ Nginx should be listening to port 80
+# #+ When querying nginx at it's root using curl it
+# #+	must return a page with a sting "Hello World!
+# #+ configures a new Ubuntu machine to respect above requirements
+# sudo apt-get update && sudo apt-get install nginx -y
+
+# sudo chown -R $USER:$USER /var/www/html/index.nginx-debian.html
+
+# sudo echo "Hello World!" > /var/www/html/index.nginx-debian.html
+
+# sudo service nginx restart
 #!/usr/bin/env bash
-# Installs Nginx web server on the server
-#+ Nginx should be listening to port 80
-#+ When querying nginx at it's root using curl it
-#+	must return a page with a sting "Hello World!
-#+ configures a new Ubuntu machine to respect above requirements
-sudo apt-get update && sudo apt-get install nginx -y
 
-sudo chown -R $USER:$USER /var/www/html/index.nginx-debian.html
+# Update package list and install Nginx
+sudo apt-get update
+sudo apt-get install nginx -y
 
-sudo echo "Hello World!" > /var/www/html/index.nginx-debian.html
+# Create a custom directory for your HTML file
+sudo mkdir -p /var/www/mywebsite
 
+# Create an HTML file with "Hello World!"
+echo "Hello World!" | sudo tee /var/www/mywebsite/index.html
+
+# Configure the default Nginx site to serve from the custom directory
+echo 'server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+
+    root /var/www/mywebsite;
+    index index.html;
+
+    server_name _;
+
+    location / {
+        try_files $uri $uri/ =404;
+    }
+}' | sudo tee /etc/nginx/sites-available/default
+
+# Restart Nginx using the service command
 sudo service nginx restart
+
+echo "Nginx installation and configuration completed. Nginx is now serving 'Hello World!' on port 80."
