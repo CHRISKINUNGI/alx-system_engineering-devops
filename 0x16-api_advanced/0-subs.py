@@ -4,6 +4,8 @@ This module queries the Reddit API and returns the number of subscribers for a g
 """
 
 import requests
+import sys
+
 
 def number_of_subscribers(subreddit):
     """
@@ -16,7 +18,7 @@ def number_of_subscribers(subreddit):
         int: The number of subscribers, or 0 if the subreddit is invalid.
     """
     url = f"https://www.reddit.com/r/{subreddit}/about.json"
-    headers = {'User-Agent': 'MyBot/0.0.1'}  # Set a custom User-Agent
+    headers = {'User-Agent': 'MyBot/0.0.1'} # Set a custom User-Agent
     response = requests.get(url, headers=headers)
     
     if response.status_code == 200:
@@ -26,11 +28,17 @@ def number_of_subscribers(subreddit):
     else:
         return 0
 
-# Test the function
-if __name__ == "__main__":
-    import sys
+
+def main():
+    """
+    Main function to handle command-line arguments and call the number_of_subscribers function.
+    """
     if len(sys.argv) < 2:
         print("Please pass an argument for the subreddit to search.")
     else:
         subreddit = sys.argv[1]
         print(number_of_subscribers(subreddit))
+
+
+if __name__ == "__main__":
+    main()
